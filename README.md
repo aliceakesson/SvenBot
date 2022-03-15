@@ -6,8 +6,8 @@ Basic Discord Bot that I'm just making out of curiosity
 
 <br> 
 
-<div style="display:flex">
-  <img width="300" alt="Bot connected to Discord server" src="https://user-images.githubusercontent.com/91065258/158409291-80f85e68-1787-44ad-bd48-6fa04b9b697b.png">
+<div style="display:flex; width:100%">
+  <img width="auto" alt="Bot connected to Discord server" src="https://user-images.githubusercontent.com/91065258/158409291-80f85e68-1787-44ad-bd48-6fa04b9b697b.png">
   <img width="700" alt="Some of the bot responses" src="https://user-images.githubusercontent.com/91065258/158410399-46fcdd94-42de-4b35-a508-588812d57bf9.png">
 </div>
 
