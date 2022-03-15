@@ -4,6 +4,12 @@ import random
 
 prefix = "woof"
 
+commands = ["hello", "woof", "status", "howgay"]
+commandDescribtions = ["Greet me!", 
+                      "Bark at me, I dare you", 
+                      "Economic balance of the human", 
+                      "Try it"]
+
 client = discord.Client()
 
 @client.event
@@ -66,7 +72,11 @@ async def on_message(message):
         if len(messageClone) > 4 and messageClone[4:] != " ":
           return
 
-        await message.channel.send("**woof hello**: Greet me!\n**woof status**: Economic balance of the human\n**woof howgay**: Try it")
+        messageToSend = ""
+        for x in range(len(commands)):
+          messageToSend += "**woof " + commands[x] + "**: " + commandDescribtions[x] + "\n\n"
+        
+        await message.channel.send(messageToSend)
 
 
 client.run(os.getenv("TOKEN"))
