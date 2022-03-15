@@ -1,5 +1,6 @@
 import discord
 import os
+import random
 
 prefix = "woof"
 
@@ -47,6 +48,19 @@ async def on_message(message):
 
         if message.content.lower() == correctMessage:
           await message.channel.send(message.content)
+      elif messageClone.startswith("status"):
+        if len(messageClone) > 6 and messageClone[6:] != " ":
+          return
+        
+        amountOfMoney = 0
+        
+        await message.channel.send("__**" + str(message.author.name)+ "'s status:**__" ""+ "\nMoney: " + str(amountOfMoney) + " coins")
+
+      elif messageClone.startswith("howgay"):
+        if len(messageClone) > 6 and messageClone[6:] != " ":
+          return
+
+        await message.channel.send(str(message.author.name) + " is " + str(random.randint(0, 100)) + "% gay")
 
 
 client.run(os.getenv("TOKEN"))
