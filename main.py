@@ -62,5 +62,11 @@ async def on_message(message):
 
         await message.channel.send(str(message.author.name) + " is " + str(random.randint(0, 100)) + "% gay")
 
+      elif messageClone.startswith("help"):
+        if len(messageClone) > 4 and messageClone[4:] != " ":
+          return
+
+        await message.channel.send("**woof hello**: Greet me!\n**woof status**: Economic balance of the human\n**woof howgay**: Try it")
+
 
 client.run(os.getenv("TOKEN"))
