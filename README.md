@@ -11,4 +11,4 @@ Basic Discord Bot that I'm just making out of curiosity
   <img width="700" alt="Some of the bot responses" src="https://user-images.githubusercontent.com/91065258/158410399-46fcdd94-42de-4b35-a508-588812d57bf9.png">
 </div>
 
-<p><br><b>woof</b></p>
+<p style="font-size:50px"><br><b>woof</b></p>
