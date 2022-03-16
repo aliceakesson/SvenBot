@@ -7,24 +7,30 @@ from keep_alive import keep_alive
 
 prefix = "woof"
 
-commands = ["hello", "woof", "status", "howgay", "randomdog"]
+commands = ["hello", "woof", "status", "howgay", "randomdog", "barkatme"]
 commandDescribtions = [
     "Greet me!", 
     "Bark at me, I dare you", 
     "Economic balance of the human",
     "Try it",
-    "Dogs"
+    "Dogs",
+    "I bark at you."
 ]
 
 client = discord.Client()
 
 def get_random_dog():
-  response = requests.get("https://random.dog/api/woof")
-  json_data = json.loads(response.image) #response.iomage??
+  response = requests.get("https://random.dog/woof.json")
+  json_data = json.loads(response.text)
 
+  return (json_data['url'])
+  
 @client.event
 async def on_ready():
-    print("Client: {0.user}".format(client))
+  await client.change_presence(activity=discord.Game("woof help"))
+
+  print('Connected to bot: {}'.format(client.user.name))
+  print('Bot ID: {}'.format(client.user.id))
 
 
 @client.event
@@ -106,8 +112,35 @@ async def on_message(message):
           if len(messageClone) > 9 and messageClone[9:] != " ":
                 return
 
-          get_random_dog()
+          image = get_random_dog()
+          await message.channel.send(image)
 
+        #woof barkatme
+        elif messageClone.startswith("barkatme"):
+          if len(messageClone) > 8 and messageClone[8:] != " ":
+                return
+
+          possibleBarks = ["bark", "grr", "woof", "growl"]
+
+          finalBark = ""
+
+          for x in range(5):
+            word = possibleBarks[random.randint(0,len(possibleBarks)-1)]
+            
+            for y in range(len(word)):
+              amountOfCharacters = random.randint(1,3)
+
+              for z in range(amountOfCharacters):
+                upperOrLowercase = random.randint(0,1)
+
+                if upperOrLowercase == 0:
+                  finalBark+=word[y].lower()
+                else:
+                  finalBark+=word[y].upper()
+
+            finalBark+=" "
+
+          await message.channel.send(finalBark)
 
 keep_alive()
 client.run(os.getenv("TOKEN"))
