@@ -3,19 +3,23 @@ import os
 import random
 import requests
 import json
+from replit import db 
 from keep_alive import keep_alive
 
-prefix = "woof"
+prefix = "!"
 
-commands = ["hello", "woof", "status", "howgay", "randomdog", "barkatme"]
+commands = ["hello", "woof", "status", "howgay", "dog", "bark", "beg"]
 commandDescribtions = [
     "Greet me!", 
     "Bark at me, I dare you", 
     "Economic balance of the human",
     "Try it",
-    "Dogs",
-    "I bark at you."
+    "Dog.",
+    "I bark at you.",
+    "Hm. I guess you can ask me for some money"
 ]
+
+moneyDatabase = "money"
 
 client = discord.Client()
 
@@ -27,7 +31,7 @@ def get_random_dog():
   
 @client.event
 async def on_ready():
-  await client.change_presence(activity=discord.Game("woof help"))
+  await client.change_presence(activity=discord.Game(prefix + "help"))
 
   print('Connected to bot: {}'.format(client.user.name))
   print('Bot ID: {}'.format(client.user.id))
@@ -37,13 +41,12 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-
+      
     if message.content.startswith(prefix) and len(message.content) > len(
-            prefix) and message.content[len(prefix)] == " ":
+            prefix):
         #checks if its the prefix followed by something else
-        #also (space in between)
 
-        actualMessage = message.content[len(prefix) + 1:]
+        actualMessage = message.content[len(prefix):]
 
         index = 0
         for x in actualMessage:
@@ -61,18 +64,31 @@ async def on_message(message):
             if len(messageClone) > 5 and messageClone[5:] != " ":
                 return
 
-            await message.channel.send("Hello!")
+            greetings = ["Hello", "Greetings", "What's up"]
+
+            noGreetingPossibility = random.randint(0, 1000) 
+          
+            if noGreetingPossibility == 0:
+              await message.channel.send("No greeting for you")
+
+            else:
+              await message.channel.send(greetings[random.randint(0, len(greetings)-1)] + " " + "<@" + str(message.author.id) + ">"+ "!")
 
         #woof woof
         elif messageClone.startswith("woof"):
-            amountOfWords = len(message.content.split())
-            correctMessage = "woof"
+          amountOfWords = len(messageClone.split())
 
-            for x in range(amountOfWords - 1):
-                correctMessage += " woof"
+          correctMessage = ""
+          if prefix == "woof" or prefix == "woof ":
+            correctMessage = "woof "
 
-            if message.content.lower() == correctMessage:
-                await message.channel.send(message.content)
+          for x in range(amountOfWords):
+              correctMessage += "woof "
+
+          correctMessage = correctMessage[0:len(correctMessage)-1]
+ 
+          if messageClone.lower() == correctMessage:
+              await message.channel.send(message.content[len(prefix):])
 
         #woof status
         elif messageClone.startswith("status"):
@@ -81,8 +97,8 @@ async def on_message(message):
 
             amountOfMoney = 0
 
-            await message.channel.send("__**" + str(message.author.name) +
-                                       "'s status:**__"
+            await message.channel.send("<@" + str(message.author.id) + ">" +
+                                       "'s status:"
                                        "" + "\nMoney: " + str(amountOfMoney) +
                                        " coins")
 
@@ -92,7 +108,7 @@ async def on_message(message):
                 return
 
             await message.channel.send(
-                str(message.author.name) + " is " +
+                "<@" + str(message.author.id) + ">" + " is " +
                 str(random.randint(0, 100)) + "% gay")
 
         #woof help
@@ -102,13 +118,13 @@ async def on_message(message):
 
             messageToSend = ""
             for x in range(len(commands)):
-                messageToSend += "**woof " + commands[
+                messageToSend += "**" + prefix + commands[
                     x] + "**: " + commandDescribtions[x] + "\n\n"
 
             await message.channel.send(messageToSend)
 
         #woof randomdog 
-        elif messageClone.startswith("randomdog"):
+        elif messageClone.startswith("dog"):
           if len(messageClone) > 9 and messageClone[9:] != " ":
                 return
 
@@ -116,7 +132,7 @@ async def on_message(message):
           await message.channel.send(image)
 
         #woof barkatme
-        elif messageClone.startswith("barkatme"):
+        elif messageClone.startswith("bark"):
           if len(messageClone) > 8 and messageClone[8:] != " ":
                 return
 
@@ -124,7 +140,7 @@ async def on_message(message):
 
           finalBark = ""
 
-          for x in range(5):
+          for x in range(random.randint(5,10)):
             word = possibleBarks[random.randint(0,len(possibleBarks)-1)]
             
             for y in range(len(word)):
@@ -141,6 +157,23 @@ async def on_message(message):
             finalBark+=" "
 
           await message.channel.send(finalBark)
+
+        #beg
+        elif messageClone.startswith("beg"):
+          if len(messageClone) > 3 and messageClone[3:] != " ":
+                return
+
+          if str(message.author.id) in db.keys():
+            money = random.randint(1, 30) * 10
+
+            if moneyDatabase in db[str(message.author.id)]:
+              db[str(message.author.id)][moneyDatabase] += money
+            else:
+              db[str(message.author.id)][moneyDatabase] = money
+
+          else:
+            db[str(message.author.id)] = {moneyDatabase: money}
+            
 
 keep_alive()
 client.run(os.getenv("TOKEN"))
