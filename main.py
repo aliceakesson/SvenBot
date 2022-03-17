@@ -8,7 +8,7 @@ from keep_alive import keep_alive
 
 prefix = "!"
 
-commands = ["hello", "woof", "status", "howgay", "dog", "bark", "beg"]
+commands = ["hello", "woof", "status", "howgay", "dog", "bark", "beg", "8ball"]
 commandDescribtions = [
     "Greet me!", 
     "Bark at me, I dare you", 
@@ -16,7 +16,8 @@ commandDescribtions = [
     "Try it",
     "Dog.",
     "I bark at you.",
-    "Hm. I guess you can ask me for some money"
+    "Hm. I guess you can ask me for some money",
+    "Test my wisdom"
 ]
 
 moneyDatabase = "money"
@@ -107,9 +108,11 @@ async def on_message(message):
             if len(messageClone) > 6 and messageClone[6:] != " ":
                 return
 
+            wordAlt = ["gay", "homosexual", "playing for the other team"]
+          
             await message.channel.send(
                 "<@" + str(message.author.id) + ">" + " is " +
-                str(random.randint(0, 100)) + "% gay")
+                str(random.randint(0, 100)) + "% " + wordAlt[random.randint(0,len(wordAlt)-1)])
 
         #woof help
         elif messageClone.startswith("help"):
@@ -173,7 +176,25 @@ async def on_message(message):
 
           else:
             db[str(message.author.id)] = {moneyDatabase: money}
+
+        #8ball
+        elif messageClone.startswith("8ball"):
+          if len(messageClone) > 5 and messageClone[5] != " ":
+            return
+          
+          amountOfWords = len(messageClone.split())
+          if amountOfWords == 1:
+
+            wordAlt = ["You need to ask me something", "I can't seem to find the question", "Dude you can't just ask me to answer without a question"]
+
+            await message.channel.send(wordAlt[random.randint(0, len(wordAlt)-1)])
+            return
+
+          wordAlt = ["I guess, why not", "Yes", "No", "Hard pass", "I don't think so bro", "Sorry, but no", "Absolutely yes", "YES, suprised you're even asking", "Maybe, maybe..", "Do you really wanna know the answer", "Ask again", "I'd rather die", "Please no", "You wish", "I don't care", "Sure ;)", "Don't count on it", "Sorry what was I supposed to answer", "Doubtful", "Very likely", "What do you think the answer is", "You're a moron for asking", "Hell no", "I hope not", "I hope so", "I suppose so", ""]
+
+          await message.channel.send(wordAlt[random.randint(0, len(wordAlt)-1)])
             
+          
 
 keep_alive()
 client.run(os.getenv("TOKEN"))
