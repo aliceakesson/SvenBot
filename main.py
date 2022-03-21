@@ -3,48 +3,45 @@ import os
 import random
 import requests
 import json
-from replit import db 
+from replit import db
 from keep_alive import keep_alive
 
 prefix = "!"
 
 commands = ["hello", "woof", "status", "howgay", "dog", "bark", "beg", "8ball"]
 commandDescribtions = [
-    "Greet me!", 
-    "Bark at me, I dare you", 
-    "Economic balance of the human",
-    "Try it",
-    "Dog.",
-    "I bark at you.",
-    "Hm. I guess you can ask me for some money",
-    "Test my wisdom"
+    "Greet me!", "Bark at me, I dare you", "Economic balance of the human",
+    "Try it", "Dog.", "I bark at you.",
+    "Hm. I guess you can ask me for some money", "Test my wisdom"
 ]
 
 moneyDatabase = "money"
 
 client = discord.Client()
 
-def get_random_dog():
-  response = requests.get("https://random.dog/woof.json")
-  json_data = json.loads(response.text)
 
-  return (json_data['url'])
-  
+def get_random_dog():
+    response = requests.get("https://random.dog/woof.json")
+    json_data = json.loads(response.text)
+
+    return (json_data['url'])
+
+
 @client.event
 async def on_ready():
-  await client.change_presence(activity=discord.Game(prefix + "help"))
+    await client.change_presence(activity=discord.Game(prefix + "help"))
 
-  print('Connected to bot: {}'.format(client.user.name))
-  print('Bot ID: {}'.format(client.user.id))
+    print('Connected to bot: {}'.format(client.user.name))
+    print('Bot ID: {}'.format(client.user.id))
 
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
-      
-    if message.content.startswith(prefix) and len(message.content) > len(
-            prefix):
+
+    if message.content.startswith(prefix) and len(
+            message.content) > len(prefix):
         #checks if its the prefix followed by something else
 
         actualMessage = message.content[len(prefix):]
@@ -67,29 +64,32 @@ async def on_message(message):
 
             greetings = ["Hello", "Greetings", "What's up"]
 
-            noGreetingPossibility = random.randint(0, 1000) 
-          
+            noGreetingPossibility = random.randint(0, 1000)
+
             if noGreetingPossibility == 0:
-              await message.channel.send("No greeting for you")
+                await message.channel.send("No greeting for you")
 
             else:
-              await message.channel.send(greetings[random.randint(0, len(greetings)-1)] + " " + "<@" + str(message.author.id) + ">"+ "!")
+                await message.channel.send(
+                    greetings[random.randint(0,
+                                             len(greetings) - 1)] + " " +
+                    "<@" + str(message.author.id) + ">" + "!")
 
         #woof woof
         elif messageClone.startswith("woof"):
-          amountOfWords = len(messageClone.split())
+            amountOfWords = len(messageClone.split())
 
-          correctMessage = ""
-          if prefix == "woof" or prefix == "woof ":
-            correctMessage = "woof "
+            correctMessage = ""
+            if prefix == "woof" or prefix == "woof ":
+                correctMessage = "woof "
 
-          for x in range(amountOfWords):
-              correctMessage += "woof "
+            for x in range(amountOfWords):
+                correctMessage += "woof "
 
-          correctMessage = correctMessage[0:len(correctMessage)-1]
- 
-          if messageClone.lower() == correctMessage:
-              await message.channel.send(message.content[len(prefix):])
+            correctMessage = correctMessage[0:len(correctMessage) - 1]
+
+            if messageClone.lower() == correctMessage:
+                await message.channel.send(message.content[len(prefix):])
 
         #woof status
         elif messageClone.startswith("status"):
@@ -109,10 +109,12 @@ async def on_message(message):
                 return
 
             wordAlt = ["gay", "homosexual", "playing for the other team"]
-          
+
             await message.channel.send(
                 "<@" + str(message.author.id) + ">" + " is " +
-                str(random.randint(0, 100)) + "% " + wordAlt[random.randint(0,len(wordAlt)-1)])
+                str(random.randint(0, 100)) + "% " +
+                wordAlt[random.randint(0,
+                                       len(wordAlt) - 1)])
 
         #woof help
         elif messageClone.startswith("help"):
@@ -126,75 +128,90 @@ async def on_message(message):
 
             await message.channel.send(messageToSend)
 
-        #woof randomdog 
+        #woof randomdog
         elif messageClone.startswith("dog"):
-          if len(messageClone) > 9 and messageClone[9:] != " ":
+            if len(messageClone) > 9 and messageClone[9:] != " ":
                 return
 
-          image = get_random_dog()
-          await message.channel.send(image)
+            image = get_random_dog()
+            await message.channel.send(image)
 
         #woof barkatme
         elif messageClone.startswith("bark"):
-          if len(messageClone) > 8 and messageClone[8:] != " ":
+            if len(messageClone) > 8 and messageClone[8:] != " ":
                 return
 
-          possibleBarks = ["bark", "grr", "woof", "growl"]
+            possibleBarks = ["bark", "grr", "woof", "growl"]
 
-          finalBark = ""
+            finalBark = ""
 
-          for x in range(random.randint(5,10)):
-            word = possibleBarks[random.randint(0,len(possibleBarks)-1)]
-            
-            for y in range(len(word)):
-              amountOfCharacters = random.randint(1,3)
+            for x in range(random.randint(5, 10)):
+                word = possibleBarks[random.randint(0, len(possibleBarks) - 1)]
 
-              for z in range(amountOfCharacters):
-                upperOrLowercase = random.randint(0,1)
+                for y in range(len(word)):
+                    amountOfCharacters = random.randint(1, 3)
 
-                if upperOrLowercase == 0:
-                  finalBark+=word[y].lower()
-                else:
-                  finalBark+=word[y].upper()
+                    for z in range(amountOfCharacters):
+                        upperOrLowercase = random.randint(0, 1)
 
-            finalBark+=" "
+                        if upperOrLowercase == 0:
+                            finalBark += word[y].lower()
+                        else:
+                            finalBark += word[y].upper()
 
-          await message.channel.send(finalBark)
+                finalBark += " "
+
+            await message.channel.send(finalBark)
 
         #beg
         elif messageClone.startswith("beg"):
-          if len(messageClone) > 3 and messageClone[3:] != " ":
+            if len(messageClone) > 3 and messageClone[3:] != " ":
                 return
 
-          if str(message.author.id) in db.keys():
-            money = random.randint(1, 30) * 10
+            if str(message.author.id) in db.keys():
+                money = random.randint(1, 30) * 10
 
-            if moneyDatabase in db[str(message.author.id)]:
-              db[str(message.author.id)][moneyDatabase] += money
+                db[str(message.author.id)][moneyDatabase] += money
+
             else:
-              db[str(message.author.id)][moneyDatabase] = money
-
-          else:
-            db[str(message.author.id)] = {moneyDatabase: money}
+                db[str(message.author.id)] = {moneyDatabase: money}
 
         #8ball
         elif messageClone.startswith("8ball"):
-          if len(messageClone) > 5 and messageClone[5] != " ":
-            return
-          
-          amountOfWords = len(messageClone.split())
-          if amountOfWords == 1:
+            if len(messageClone) > 5 and messageClone[5] != " ":
+                return
 
-            wordAlt = ["You need to ask me something", "I can't seem to find the question", "Dude you can't just ask me to answer without a question"]
+            amountOfWords = len(messageClone.split())
+            if amountOfWords == 1:
 
-            await message.channel.send(wordAlt[random.randint(0, len(wordAlt)-1)])
-            return
+                wordAlt = [
+                    "You need to ask me something",
+                    "I can't seem to find the question",
+                    "Dude you can't just ask me to answer without a question"
+                ]
 
-          wordAlt = ["I guess, why not", "Yes", "No", "Hard pass", "I don't think so bro", "Sorry, but no", "Absolutely yes", "YES, suprised you're even asking", "Maybe, maybe..", "Do you really wanna know the answer", "Ask again", "I'd rather die", "Please no", "You wish", "I don't care", "Sure ;)", "Don't count on it", "Sorry what was I supposed to answer", "Doubtful", "Very likely", "What do you think the answer is", "You're a moron for asking", "Hell no", "I hope not", "I hope so", "I suppose so", ""]
+                await message.channel.send(wordAlt[random.randint(
+                    0,
+                    len(wordAlt) - 1)])
+                return
 
-          await message.channel.send(wordAlt[random.randint(0, len(wordAlt)-1)])
-            
-          
+            wordAlt = [
+                "I guess, why not", "Yes", "No", "Hard pass",
+                "I don't think so bro", "Sorry, but no", "Absolutely yes",
+                "YES, suprised you're even asking", "Maybe, maybe..",
+                "Do you really wanna know the answer", "Ask again",
+                "I'd rather die", "Please no", "You wish", "I don't care",
+                "Sure ;)", "Don't count on it",
+                "Sorry what was I supposed to answer", "Doubtful",
+                "Very likely", "What do you think the answer is",
+                "You're a moron for asking", "Hell no", "I hope not",
+                "I hope so", "I suppose so", ""
+            ]
+
+            await message.channel.send(wordAlt[random.randint(
+                0,
+                len(wordAlt) - 1)])
+
 
 keep_alive()
 client.run(os.getenv("TOKEN"))
