@@ -6,9 +6,8 @@ Basic Discord Bot that I'm just making out of curiosity
 
 <br> 
 
-<div style="display:flex; width:100%">
-  <img width="auto" alt="Bot connected to Discord server" src="https://user-images.githubusercontent.com/91065258/158409291-80f85e68-1787-44ad-bd48-6fa04b9b697b.png">
-  <img width="700" alt="Some of the bot responses" src="https://user-images.githubusercontent.com/91065258/158410399-46fcdd94-42de-4b35-a508-588812d57bf9.png">
-</div>
+![svenbot 1](https://user-images.githubusercontent.com/91065258/160186011-3e35e3b7-c799-4f90-bc39-5f3637668d89.png)
+![svenbot 2](https://user-images.githubusercontent.com/91065258/160186039-c7225e55-b01c-415d-be07-beae511a2778.png)
+![svenbot 3](https://user-images.githubusercontent.com/91065258/160186048-79b16e6f-b294-4024-85ce-4ae128a8fb04.png)
 
 <p style="font-size:50px"><br><b>woof</b></p>
