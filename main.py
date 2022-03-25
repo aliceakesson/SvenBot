@@ -8,7 +8,7 @@ from keep_alive import keep_alive
 
 prefix = "!"
 
-commands = ["hello", "woof", "status", "howgay", "dog", "bark", "beg", "8ball"]
+commands = ["hello", "woof", "bal", "howgay", "dog", "bark", "beg", "8ball"]
 commandDescribtions = [
     "Greet me!", "Bark at me, I dare you", "Economic balance of the human",
     "Try it", "Dog.", "I bark at you.",
@@ -91,17 +91,20 @@ async def on_message(message):
             if messageClone.lower() == correctMessage:
                 await message.channel.send(message.content[len(prefix):])
 
-        #woof status
-        elif messageClone.startswith("status"):
-            if len(messageClone) > 6 and messageClone[6:] != " ":
-                return
+        #woof bal
+        elif messageClone.startswith("bal"):
+          if len(messageClone) > 3 and messageClone[3:] != " ":
+              return
 
-            amountOfMoney = 0
+          amountOfMoney = 0
 
-            await message.channel.send("<@" + str(message.author.id) + ">" +
-                                       "'s status:"
-                                       "" + "\nMoney: " + str(amountOfMoney) +
-                                       " coins")
+          if str(message.author.id) in db.keys():
+            amountOfMoney = db[str(message.author.id)][moneyDatabase]
+
+          await message.channel.send("<@" + str(message.author.id) + ">" +
+                                     "'s balance:"
+                                     "" + "\nMoney: " + str(amountOfMoney) +
+                                     " coins")
 
         #woof howgay
         elif messageClone.startswith("howgay"):
@@ -165,17 +168,22 @@ async def on_message(message):
 
         #beg
         elif messageClone.startswith("beg"):
-            if len(messageClone) > 3 and messageClone[3:] != " ":
-                return
+          if len(messageClone) > 3 and messageClone[3:] != " ":
+              return
+            
+          # del db[str(message.author.id)]
+            
+          money = random.randint(1, 30) * 10
+          moneyRightNow = money
+          
+          if str(message.author.id) in db.keys():
+            moneyRightNow = int(db[str(message.author.id)][moneyDatabase]) + money
+            db[str(message.author.id)][moneyDatabase] = moneyRightNow
+          else:
+            db[str(message.author.id)] = {moneyDatabase: money}
 
-            if str(message.author.id) in db.keys():
-                money = random.randint(1, 30) * 10
-
-                db[str(message.author.id)][moneyDatabase] += money
-
-            else:
-                db[str(message.author.id)] = {moneyDatabase: money}
-
+          await message.channel.send("You earnt " + str(money) + " coins" + "\nCurrent balance: " + str(moneyRightNow) + " coins")
+         
         #8ball
         elif messageClone.startswith("8ball"):
             if len(messageClone) > 5 and messageClone[5] != " ":
