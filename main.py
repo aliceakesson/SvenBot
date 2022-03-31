@@ -108,13 +108,18 @@ async def on_message(message):
 
         #woof howgay
         elif messageClone.startswith("howgay"):
-            if len(messageClone) > 6 and messageClone[6:] != " ":
+            if len(messageClone) > 6 and messageClone[6:7] != " ":
                 return
 
             wordAlt = ["gay", "homosexual", "playing for the other team"]
 
+            person = str(message.author.id)
+            if len(messageClone) > 8 and messageClone[7:9] == "<@" and messageClone[len(messageClone)-1:] == ">":
+
+              person = messageClone[9:len(messageClone)-1]
+              
             await message.channel.send(
-                "<@" + str(message.author.id) + ">" + " is " +
+                "<@" + person + ">" + " is " +
                 str(random.randint(0, 100)) + "% " +
                 wordAlt[random.randint(0,
                                        len(wordAlt) - 1)])
