@@ -57,7 +57,7 @@ async def on_message(message):
         #removes unneccesary spaces
         #right after the prefix and makes the message lowercase
 
-        #woof hello
+        #pref + hello
         if messageClone.startswith("hello"):
             if len(messageClone) > 5 and messageClone[5:] != " ":
                 return
@@ -226,5 +226,27 @@ async def on_message(message):
                 len(wordAlt) - 1)])
 
 
+        elif messageClone.startswith("gamble"):
+          if len(messageClone) > 6 and messageClone[6:] != " ":
+            return
+
+          moneyRightNow = 0
+          if str(message.author.id) in db.keys():
+            moneyRightNow = int(db[str(message.author.id)][moneyDatabase]) 
+
+          else:
+            db[str(message.author.id)] = {moneyDatabase: 0}
+
+          moneyRequested = 0
+          if(len(messageClone)) > 7:
+            moneyRequested = messageClone[7:]
+          else:
+            return
+
+          if " " in messageClone:
+            messageClone = messageClone[0:messageClone.indexOf(" ")]
+
+          print(messageClone)
+          
 keep_alive()
 client.run(os.getenv("TOKEN"))
