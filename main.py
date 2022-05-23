@@ -231,22 +231,27 @@ async def on_message(message):
             return
 
           moneyRightNow = 0
+          print("test")
           if str(message.author.id) in db.keys():
+            print("if")
             moneyRightNow = int(db[str(message.author.id)][moneyDatabase]) 
-
           else:
+            print("else")
             db[str(message.author.id)] = {moneyDatabase: 0}
 
+          print("moneyRightNow: " + moneyRightNow)
+
           moneyRequested = 0
+          
           if(len(messageClone)) > 7:
-            moneyRequested = messageClone[7:]
+            print("if sats")
+            text = str(messageClone[7:])
+            await message.channel.send(text)
           else:
+            print("return")
             return
 
-          if " " in messageClone:
-            messageClone = messageClone[0:messageClone.indexOf(" ")]
-
-          print(messageClone)
+          print("moneyRequested: " + moneyRequested)
           
 keep_alive()
 client.run(os.getenv("TOKEN"))
