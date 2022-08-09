@@ -8,11 +8,12 @@ from keep_alive import keep_alive
 
 prefix = "!"
 
-commands = ["hello", "woof", "bal", "howgay", "dog", "bark", "beg", "8ball"]
+commands = ["hello", "woof", "bal", "howgay", "dog", "bark", "beg", "8ball", "gamble", "pp"]
 commandDescribtions = [
     "Greet me!", "Bark at me, I dare you", "Economic balance of the human",
     "Try it", "Dog.", "I bark at you.",
-    "Hm. I guess you can ask me for some money", "Test my wisdom"
+    "Hm. I guess you can ask me for some money", "Test my wisdom", 
+    "Give me an amount and let's gamble", "Check the length down there"
 ]
 
 moneyDatabase = "money"
@@ -257,6 +258,30 @@ async def on_message(message):
             await message.channel.send("Tough luck, you lost " + str(moneyRequested) + " coins. You now have " + str(moneyRightNow) + " coins")
 
           db[str(message.author.id)] = {moneyDatabase: moneyRightNow}
-          
+
+        #pref + pp
+        elif messageClone.startswith("pp"):
+          if len(messageClone) > 2 and messageClone[2:3] != " ":
+            return
+
+          length = random.randint(1, 30)
+          penis = "8"
+          for x in range(length):
+            penis += "="
+          penis += "D"
+
+          person = str(message.author.id)
+          if len(messageClone) > 4 and messageClone[3:4] == "<@" and messageClone[len(messageClone)-1:] == ">":
+
+            person = messageClone[5:len(messageClone)-1]
+
+          specialpeepee = random.randint(0, 100)
+          if specialpeepee == 69:
+            penis = "8=======================================================================================================================================================================================================================================================================================================================D"
+            
+          await message.channel.send(
+              "<@" + person + ">" + "´s pp:\n" + penis)
+
+            
 keep_alive()
 client.run(os.getenv("TOKEN"))
