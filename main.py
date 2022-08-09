@@ -75,7 +75,7 @@ async def on_message(message):
                                              len(greetings) - 1)] + " " +
                     "<@" + str(message.author.id) + ">" + "!")
 
-        #woof woof
+        #pref + woof
         elif messageClone.startswith("woof"):
             amountOfWords = len(messageClone.split())
 
@@ -91,7 +91,7 @@ async def on_message(message):
             if messageClone.lower() == correctMessage:
                 await message.channel.send(message.content[len(prefix):])
 
-        #woof bal
+        #pref + bal
         elif messageClone.startswith("bal"):
           if len(messageClone) > 3 and messageClone[3:] != " ":
               return
@@ -106,7 +106,7 @@ async def on_message(message):
                                      "" + "\nMoney: " + str(amountOfMoney) +
                                      " coins")
 
-        #woof howgay
+        #pref + howgay
         elif messageClone.startswith("howgay"):
             if len(messageClone) > 6 and messageClone[6:7] != " ":
                 return
@@ -124,7 +124,7 @@ async def on_message(message):
                 wordAlt[random.randint(0,
                                        len(wordAlt) - 1)])
 
-        #woof help
+        #pref + help
         elif messageClone.startswith("help"):
             if len(messageClone) > 4 and messageClone[4:] != " ":
                 return
@@ -136,7 +136,7 @@ async def on_message(message):
 
             await message.channel.send(messageToSend)
 
-        #woof randomdog
+        #pref + dog
         elif messageClone.startswith("dog"):
             if len(messageClone) > 9 and messageClone[9:] != " ":
                 return
@@ -144,7 +144,7 @@ async def on_message(message):
             image = get_random_dog()
             await message.channel.send(image)
 
-        #woof barkatme
+        #pref + bark
         elif messageClone.startswith("bark"):
             if len(messageClone) > 8 and messageClone[8:] != " ":
                 return
@@ -171,7 +171,7 @@ async def on_message(message):
 
             await message.channel.send(finalBark)
 
-        #beg
+        #pref + beg
         elif messageClone.startswith("beg"):
           if len(messageClone) > 3 and messageClone[3:] != " ":
               return
@@ -189,7 +189,7 @@ async def on_message(message):
 
           await message.channel.send("You earnt " + str(money) + " coins" + "\nCurrent balance: " + str(moneyRightNow) + " coins")
          
-        #8ball
+        #pref + 8ball
         elif messageClone.startswith("8ball"):
             if len(messageClone) > 5 and messageClone[5] != " ":
                 return
@@ -225,33 +225,38 @@ async def on_message(message):
                 0,
                 len(wordAlt) - 1)])
 
-
+        #pref + gamble
         elif messageClone.startswith("gamble"):
-          if len(messageClone) > 6 and messageClone[6:] != " ":
+          if len(messageClone) > 6 and messageClone[6:7] != " ":
             return
 
           moneyRightNow = 0
-          print("test")
           if str(message.author.id) in db.keys():
-            print("if")
             moneyRightNow = int(db[str(message.author.id)][moneyDatabase]) 
           else:
-            print("else")
             db[str(message.author.id)] = {moneyDatabase: 0}
-
-          print("moneyRightNow: " + moneyRightNow)
-
+          
           moneyRequested = 0
           
           if(len(messageClone)) > 7:
-            print("if sats")
             text = str(messageClone[7:])
-            await message.channel.send(text)
+            moneyRequested = int(text)
           else:
-            print("return")
             return
 
-          print("moneyRequested: " + moneyRequested)
+          if(moneyRequested > moneyRightNow):
+            await message.channel.send("You can't gamble with more than you have")
+            return
+
+          chance = random.randint(0, 100)
+          if(chance > 50):
+            moneyRightNow += moneyRequested
+            await message.channel.send("Woohoo, you won " + str(moneyRequested) + " coins! You now have " + str(moneyRightNow) + " coins")
+          else: 
+            moneyRightNow -= moneyRequested
+            await message.channel.send("Tough luck, you lost " + str(moneyRequested) + " coins. You now have " + str(moneyRightNow) + " coins")
+
+          db[str(message.author.id)] = {moneyDatabase: moneyRightNow}
           
 keep_alive()
 client.run(os.getenv("TOKEN"))
